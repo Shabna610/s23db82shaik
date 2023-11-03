@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  h1= title
+  p This page displays three random images.
+
+  - const imageNames = ["B1.jpg", "B2.jpg", "B3.jpeg", "B4.jpg", "B5.jpg"]
+  
+  - for (let i = 0; i < 3; i++) 
+    - const randomIndex = Math.floor(Math.random() * 5)
+    - const imageName = imageNames[randomIndex]
+
+    img(src=`/images/${imageName}`, alt=imageName, height=300, width=300)
