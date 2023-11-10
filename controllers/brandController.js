@@ -70,3 +70,56 @@ exports.brand_update_put = function (req, res) {
     res.send('NOT IMPLEMENTED: brand update PUT' + req.params.id);
 };
 
+// Handle brand detail on GET.
+exports.brand_detail = async function (req, res) {
+    console.log("detail" + req.params.id)
+    try {
+        const Brand = await brand.findById(req.params.id);
+        if (Brand == null) {
+            res.status(404);
+            res.send({"error": "Brand not found"});
+        } else {
+            res.send(Brand);
+        }
+    } catch (err) {
+        res.status(500);
+        res.send(`{"error": ${err}}`);
+    }
+};
+
+// Handle Brand update form on PUT.
+exports.brand_update_put = async function(req, res) {
+    console.log(`Update on id ${req.params.id} with body ${JSON.stringify(req.body)}`);
+    try {
+        let toUpdate = await brand.findById(req.params.id);
+
+        // Check if the document exists
+        if (!toUpdate) {
+            res.status(404).send(`{"error": "brand with ID ${req.params.id} not found"}`);
+            return;
+        }
+
+        // Do updates of properties
+        if (req.body.name) toUpdate.name = req.body.name;
+        if (req.body.price) toUpdate.price = req.body.price;
+        if (req.body.description) toUpdate.description = req.body.description;
+
+        // Handle checkbox (assuming it's named checkboxsale in the body)
+        if (req.body.checkboxsale) {
+            toUpdate.sale = true;
+        } else {
+            toUpdate.sale = false;
+        }
+
+        let result = await toUpdate.save();
+
+        // Include the sale property in the response
+        result = result.toObject(); // Convert Mongoose document to a plain JavaScript object
+        result.sale = toUpdate.sale;
+
+        console.log("Success " + result);
+        res.send(result);
+    } catch (err) {
+        res.status(500).send(`{"error": ${err}: Update for id ${req.params.id} failed`);
+    }
+};
