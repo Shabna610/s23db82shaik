@@ -2,19 +2,19 @@ var express = require('express');
 var router = express.Router();
 // Require controller modules.
 var api_controller = require('../controllers/api');
-var costume_controller = require('../controllers/costumecontroller');
+var brand_controller = require('../controllers/brandController');
 /// API ROUTE ///
 // GET resources base.
 router.get('/', api_controller.api);
-/// COSTUME ROUTES ///
-// POST request for creating a Costume.
-router.post('/costumes', costume_controller.costume_create_post);
-// DELETE request to delete Costume.
-router.delete('/costumes/:id', costume_controller.costume_delete);
-// PUT request to update Costume.
-router.put('/costumes/:id', costume_controller.costume_update_put);
-// GET request for one Costume.
-router.get('/costumes/:id', costume_controller.costume_detail);
-// GET request for list of all Costume items.
-router.get('/costumes', costume_controller.costume_list);
+///BRAND ROUTES ///
+// POST request for creating a brand.
+router.post('/brands', brand_controller.brand_create_post);
+// DELETE request to delete brand.
+router.delete('/brands/:id', brand_controller.brand_delete);
+// PUT request to update brand.
+router.put('/brands/:id', brand_controller.brand_update_put);
+// GET request for one brand.
+router.get('/brands/:id', brand_controller.brand_detail);
+// GET request for list of all brand items.
+router.get('/brands', brand_controller.brand_list);
 module.exports = router;

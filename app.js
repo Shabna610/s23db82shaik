@@ -6,109 +6,79 @@ var logger = require('morgan');
 
 const mongoose = require("mongoose");
 
+var resourceRouter = require('./routes/resource');
 
+var brandsRouter = require('./routes/brands'); // Updated to use brandsRouter instead of brandRouter
 
 require('dotenv').config();
 
-const connectionString = process.env.MONGO_CON
+const connectionString = process.env.MONGO_CON;
 
 mongoose.connect(connectionString, {
-
   useNewUrlParser: true,
-
   useUnifiedTopology: true,
+})
+.then(() => console.log("Connected to MongoDB"))
+.catch((err) => console.log("Error Connecting to MongoDB: ", err));
 
- })
-
- .then(() => console.log("Connected to MongoDB"))
-
- .catch((err) => console.log("Error Connecting to MongoDB: ", err));
-
-//Get the default connection
-
+// Get the default connection
 var db = mongoose.connection;
 
-//Bind connection to error event
-
+// Bind connection to error event
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-db.once("open", function(){console.log("Connection to DB succeeded")})
+db.once("open", function() {
+  console.log("Connection to DB succeeded");
+});
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var brandsRouter = require('./routes/brand');
+// var brandRouter = require('./routes/brand'); // Commented out as it seems unused
 var boardRouter = require('./routes/board');
 var chooseRouter = require('./routes/choose');
-var Costume = require("./models/costume");
-var resourceRouter = require('./routes/resource');
 
-var costumeRouter = require('./routes/costumes');
+var brand = require('./models/brand');
 
-async function recreateDB(){
-
+async function recreateDB() {
   // Delete everything
- 
-  await Costume.deleteMany();
- 
-  let instance1 = new Costume(
- 
-   {
- 
-    costume_type: "Hero",
- 
-    size:'Large',
- 
-    cost:15.4
- 
-   });
- 
-   let instance2 = new Costume(
- 
-    {
- 
-     costume_type: "Superman",
- 
-     size: 'Medium',
- 
-     cost: 17.4
- 
-    });
- 
-    let instance3 = new Costume(
- 
-     {
- 
-      costume_type: "Barbie",
- 
-      size: 'Extra Large',
- 
-      cost: 20.5
- 
-     });
- 
+  await brand.deleteMany();
+
+  let instance1 = new brand({
+    name: "Apple iPhone",
+    price: 999.99,
+    description: "The Apple iPhone is known for its sleek design."
+  });
+
+  let instance2 = new brand({
+    name: "Samsung Galaxy",
+    price: 799.99,
+    description: "The Samsung Galaxy is a feature-rich smartphone"
+  });
+
+  let instance3 = new brand({
+    name: "Dell Laptop",
+    price: 1199.99,
+    description: "The Dell Laptop is high-performance."
+  });
+
   instance1.save()
- 
-  .then(doc => {console.log("First object saved")})
- 
-   .catch(err=>{console.error(err)})
- 
+    .then(doc => { console.log("First object saved"); })
+    .catch(err => { console.error(err); });
+
   instance2.save()
- 
-  .then(doc => {console.log("Second object saved")})
- 
-   .catch(err=>{console.error(err)})
- 
+    .then(doc => { console.log("Second object saved"); })
+    .catch(err => { console.error(err); });
+
   instance3.save()
- 
-  .then(doc => {console.log("Third object saved")})
- 
-   .catch(err=>{console.error(err)})
- 
-  }
- 
- let reseed = true;
- 
- if (reseed) {recreateDB();}
+    .then(doc => { console.log("Third object saved"); })
+    .catch(err => { console.error(err); });
+}
+
+let reseed = true;
+
+if (reseed) {
+  recreateDB();
+}
 
 var app = express();
 
@@ -124,13 +94,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/brand', brandsRouter);
+// app.use('/brand', brandRouter); // Commented out as it seems unused
 app.use('/board', boardRouter);
 app.use('/choose', chooseRouter);
 
 app.use("/resource", resourceRouter);
 
-app.use('/costumes', costumeRouter);
+app.use('/brands', brandsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -147,7 +117,5 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
-
 
 module.exports = app;
