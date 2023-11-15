@@ -1,19 +1,25 @@
 extends layout
-
 block content
   h1= title
-  script.
-    function buy(index) {
-      alert("You purchased item " + index);
-    }
-  .container-fluid
-    .row
-      each car, index in results
-        .col-sm-4
-          .card
-            .card-body
-              h5.card-title Make: #{car.make}
-              p.card-text Model: #{car.model}
-              p.card-text Price: $#{car.price}
-              div
-                button.btn.btn-primary(onclick=buy(${index})) Buy
+  br
+  p Welocme to Search Results Page
+  - let result = [{ name: "Apple iPhone", price: 999.99, description: "The Apple iPhone is known for its sleek design."},{ name: "Samsung Galaxy", price: 799.99, description: "The Samsung Galaxy is a feature-rich smartphone."},{ name: "Dell Laptop", price: 1199.99, description: "The Dell Laptop is high-performance."}]   
+   div.container-fluid 
+    div.row
+     each brand,index in result
+      div.col-sm-2(onclick=`buy(${index})`) #{brand.name}
+      div.col-sm-2(onclick=`buy(${index})`) #{brand.price}
+      div.col-sm-2(onclick=`buy(${index})`) #{brand.description}
+      br
+      hr
+
+  script. 
+       function buy(index)
+       {
+        alert(`you purchased Item: ${index+1}`)
+       }
+
+
+    
+
+  

@@ -12,3 +12,5 @@ router.get('/brands/:id', brand_controlers.brand_detail);
 
 // PUT request to update a brand.
 router.put('/brands/:id', brand_controlers.brand_update_put);
+
+
