@@ -1,0 +1,49 @@
+extends layout
+block content
+  h1= title
+  if (toShow == null)
+    h2 No instance to delete
+  else
+    - let brandid = toShow._id
+    - let name = toShow.name
+    - let price = toShow.price
+    - let description = toShow.description
+    - let actionid = "/resource/brands/" + brandid
+    script let actionid = "#{actionid}"
+    div
+      div.row
+        div(class='brandAttr mr-3') brand ID is:
+        div #{brandid}
+      div.row
+        div(class='brandAttr mr-3') Name is:
+        div #{name}
+      div.row
+        div(class='brandAttr mr-3') Price is:
+        div #{price}
+      div.row
+        div(class='brandAttr mr-3') Description is:
+        div #{description}
+    button(class="btn btn-danger m-2" onclick="deleteOnid()") Delete
+    button(class="btn btn-secondary m-2" onclick="cancel()") Cancel
+  script.
+    function cancel() {
+      // Go back to the home page for the brand collection
+      window.location.href='/brands'
+    }
+  script.
+    function deleteOnid() {
+      console.log("starting delete")
+      // delete first
+      fetch(actionid, {
+        method: 'DELETE'
+      }).then((resp) => {
+        return resp.json(); // or resp.text() or whatever the server sends
+      }).then((body) => {
+        alert("Delete succeded")
+        window.location.href='/brands'
+        // TODO handle body
+      }).catch((error) => {
+        // TODO handle error
+        alert("Delete failed " + error )
+     });
+    }

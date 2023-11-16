@@ -17,4 +17,6 @@ router.put('/brands/:id', brand_controller.brand_update_put);
 router.get('/brands/:id', brand_controller.brand_detail);
 // GET request for list of all brand items.
 router.get('/brands', brand_controller.brand_list);
+
+
 module.exports = router;

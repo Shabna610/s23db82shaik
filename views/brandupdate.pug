@@ -1,0 +1,47 @@
+extends layout
+
+block content
+  h1= title
+  -
+    let brandid = toShow._id
+  -
+    let name = toShow.name
+  -
+    let price = toShow.price
+  -
+    let description = toShow.description
+  div.row(class='mb-2')
+    div.mr-1 ID is
+    div #{brandid}
+  -
+    let actionid = "/resource/brands/" + brandid
+  form(id='brandForm', action= actionid, method="PUT")
+    div.form-group
+      label.brandAttr(for='name') Brand Name 
+      input.outlined-input(type='text', name='name', value= name )
+    div.form-group
+      label.brandAttr(for='price') Brand Price
+      input.outlined-input(type='number', name='price', value= price)
+    div.form-group
+      label.brandAttr(for='description') Brand Description
+      input.outlined-input(type='text', step='any', name='description', value= description )
+    input(type="submit")
+
+  script.
+    document.forms['brandForm'].addEventListener('submit', (event) => {
+      event.preventDefault();
+      // TODO do something here to show user that form is being submitted
+      fetch(event.target.action, {
+        method: 'PUT',
+        body: new URLSearchParams(new FormData(event.target))
+      }).then((resp) => {
+        if (resp.ok) {
+          alert('brand updated successfully');
+          document.getElementById("brandForm").reset();
+        } else {
+          alert("failed to update brand");
+        }
+      }).catch((error) => {
+        alert("Update failed " + error);
+      });
+    });

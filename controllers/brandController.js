@@ -10,7 +10,7 @@ exports.brand_list = async function (req, res) {
         res.status(500);
         res.send(`{"error": ${err}}`);
     }
-};var brand = require('../models/brand');
+}; var brand = require('../models/brand');
 // List of all brands
 
 exports.brand_list = async function (req, res) {
@@ -70,25 +70,26 @@ exports.brand_update_put = function (req, res) {
     res.send('NOT IMPLEMENTED: brand update PUT' + req.params.id);
 };
 
-// Handle brand detail on GET.
+// Handle Brand detail on GET.
 exports.brand_detail = async function (req, res) {
     console.log("detail" + req.params.id)
     try {
-        const Brand = await brand.findById(req.params.id);
-        if (Brand == null) {
+        const foundbrand = await brand.findById(req.params.id);
+        if (foundbrand == null) {
             res.status(404);
-            res.send({"error": "Brand not found"});
+            res.send({ "error": "brand not found" });
         } else {
-            res.send(Brand);
+            res.send(foundbrand);
         }
     } catch (err) {
         res.status(500);
-        res.send(`{"error": ${err}}`);
-    }
+        res.send(`Brand not Found`);
+    }
 };
 
+
 // Handle Brand update form on PUT.
-exports.brand_update_put = async function(req, res) {
+exports.brand_update_put = async function (req, res) {
     console.log(`Update on id ${req.params.id} with body ${JSON.stringify(req.body)}`);
     try {
         let toUpdate = await brand.findById(req.params.id);
@@ -121,20 +122,84 @@ exports.brand_update_put = async function(req, res) {
         res.send(result);
     } catch (err) {
         res.status(500).send(`{"error": ${err}: Update for id ${req.params.id} failed`);
-    }
+    }
 };
 
 
-// Handle Costume delete on DELETE.
-exports.costume_delete = async function(req, res) {
+// Handle Brand delete on DELETE.
+exports.brand_delete = async function (req, res) {
     console.log("delete " + req.params.id)
     try {
-    result = await Costume.findByIdAndDelete( req.params.id)
-    console.log("Removed " + result)
-    res.send(result)
+        result = await brand.findByIdAndDelete(req.params.id)
+        console.log("Removed " + result)
+        res.send(result)
     } catch (err) {
-    res.status(500)
-    res.send(`{"error": Error deleting ${err}}`);
+        res.status(500)
+        res.send(`{"error": Error deleting ${err}}`);
     }
-    };
-    
+};
+
+
+// Handle a show one view with id specified by query
+exports.brand_view_one_Page = async function (req, res) {
+    console.log("single view for id " + req.query.id)
+    try {
+        result = await brand.findById(req.query.id)
+        res.render('branddetail',
+            { title: 'Brand Detail', toShow: result });
+    }
+    catch (err) {
+        res.status(500)
+        res.send({ 'error': '${err}' });
+    }
+};
+
+// Handle building the view for creating a brand.
+// No body, no in path parameter, no query.
+// Does not need to be async
+exports.brand_create_Page = function (req, res) {
+    console.log("create view")
+    try {
+        res.render('brandcreate', { title: 'Brand Create' });
+    }
+    catch (err) {
+        res.status(500)
+        res.send({ 'error': '${err}' });
+    }
+};
+
+// Handle building the view for updating an brand.
+// query provides the id
+exports.brand_update_Page = async function (req, res) {
+    console.log("update view for item " + req.query.id)
+    try {
+        const result = await brand.findById(req.query.id)
+        if (!result) {
+            res.status(404)
+            res.send('brand not found');
+            return;
+        }
+        res.render('brandupdate', { title: 'Brand Update', toShow: result });
+    }
+    catch (err) {
+        res.status(500)
+        res.send(`Brand not found`);
+    }
+};
+
+// Handle a delete one view with id from query
+exports.brand_delete_Page = async function (req, res) {
+    console.log("Delete view for id " + req.query.id)
+    try {
+        result = await brand.findById(req.query.id)
+        res.render('branddelete', {
+            title: 'Brand Delete', toShow:
+                result
+        });
+    }
+    catch (err) {
+        res.status(500)
+        res.send({ 'error': '${err}' });
+    }
+};
+

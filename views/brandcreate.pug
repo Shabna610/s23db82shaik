@@ -1,0 +1,56 @@
+extends layout
+
+block content
+  h1= title
+  form(id='brandForm', action="/resource/brands", method="POST")
+    div.form-group
+      label.brandAttr(for='name') Brand Name
+      input#name(type='text', name='name')
+    div.form-group
+      label.brandAttr(for='price') Brand Price
+      input#price(type='number', name='price')
+    div.form-group
+      label.brandAttr(for='description') Brand Description
+      input#description(type='text', name='description')
+    input(type="submit")
+    
+  style.
+    /* Add your CSS styles here */
+    #brandForm {
+      /* Your form styles */
+      margin: 20px;
+    }
+
+    .form-group {
+      /* Your form group styles */
+      margin-bottom: 10px;
+    }
+
+    label.brandAttr {
+      /* Your label styles */
+      font-weight: bold;
+    }
+
+    input {
+      /* Your input styles */
+      width: 100%;
+      padding: 5px;
+    }
+
+  script.
+    document.forms['brandForm'].addEventListener('submit', (event) => {
+      event.preventDefault();
+      // TODO do something here to show user that the form is being submitted
+      fetch(event.target.action, {
+        method: 'POST',
+        body: new URLSearchParams(new FormData(event.target)) // event.target is the form
+      }).then((resp) => {
+        return resp.json(); // or resp.text() or whatever the server sends
+      }).then((body) => {
+        alert("Save succeeded");
+        // TODO handle body
+      }).catch((error) => {
+        // TODO handle error
+        alert("Save failed " + error);
+      });
+    });

@@ -1,0 +1,20 @@
+extends layout
+block content
+ h1= title
+ - let brandid = toShow._id
+ - let name = toShow.name
+ - let price = toShow.price
+ - let description = toShow.description
+ div
+ div.row
+ div(class='brandAttr mr-3') Brand ID is:
+ div #{brandid}
+ div.row
+ div(class='brandAttr mr-3') Brand Name is:
+ div #{name}
+ div.row
+ div(class='brandAttr mr-3') Brand Price is:
+ div #{price}
+ div.row
+ div(class='brandAttr mr-3') Brand Description is:
+ div #{description}

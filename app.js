@@ -33,7 +33,7 @@ db.once("open", function() {
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-// var brandRouter = require('./routes/brand'); // Commented out as it seems unused
+var brandsRouter = require('./routes/brands');
 var boardRouter = require('./routes/board');
 var chooseRouter = require('./routes/choose');
 
@@ -94,7 +94,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-// app.use('/brand', brandRouter); // Commented out as it seems unused
+app.use('/brand', brandsRouter); 
 app.use('/board', boardRouter);
 app.use('/choose', chooseRouter);
 
