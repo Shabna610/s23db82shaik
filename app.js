@@ -61,6 +61,9 @@ var chooseRouter = require('./routes/choose');
 
 var brand = require('./models/brand');
 
+var Account =require('./models/account');
+
+
 async function recreateDB() {
   // Delete everything
   await brand.deleteMany();
@@ -134,6 +137,8 @@ app.use("/resource", resourceRouter);
 
 app.use('/brands', brandsRouter);
 
+
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -149,5 +154,13 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+// passport config
+// Use the existing connection
+// The Account model
+
+passport.use(new LocalStrategy(Account.authenticate()));
+passport.serializeUser(Account.serializeUser());
+passport.deserializeUser(Account.deserializeUser())
 
 module.exports = app;
