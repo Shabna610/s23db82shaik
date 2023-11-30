@@ -40,6 +40,8 @@ block content
   script.
     document.forms['brandForm'].addEventListener('submit', (event) => {
       event.preventDefault();
+
+      
       // TODO do something here to show user that the form is being submitted
       fetch(event.target.action, {
         method: 'POST',
