@@ -2,16 +2,25 @@ extends layout
 
 block content
   h1= title
+  
   - let items = results;
+
+  button.btn(class="btn-info", onclick=create) Add new Brand
+
   each item in items
     - let destination = `/brands/update?id=${item._id}`
+    - let detail = `/brands/detail/${item._id}` 
+    - let deleteBrand = `/brands/delete/${item._id}` 
+    
     div
       p name - #{item.name}
       p price - #{item.price}
       p description - #{item.description}
+      
       button.btn(class="btn-primary ml-1", onclick=`dispatch('${destination}')`) Update
-      br
-      br
+      button.btn(class="btn-success ml-1", onclick=`dispatch('${detail}')`) Details
+      button.btn(class="btn-dark ml-1", onclick=`dispatch('${deleteBrand}')`) Delete
+      
   script.
     function dispatch(path){
       window.location.href = path;

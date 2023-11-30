@@ -1,18 +1,12 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to my web application using Pug templates.
-  button(type="button" class="btn btn-secondary" onclick="goFaster()") Press Me
-  br
-  br
-  div#faster Increase the Speed
-  script.
-    mph = 20;
-    change = 1;
-    function goFaster(){
-      mph += change;
-      change += 1;
-      document.getElementById("faster").innerHTML = "MPH " + mph + " Change " + change;
-    }
-  a(href="/brand") View Search Results
+  if (!user)
+    a(href="/login") Login
+    br
+    a(href="/register") Register
+  if (user)
+    p You are currently logged in as #{user.username}
+    a(href="/brands") Take me to brands
+    br
+    a(href="/logout") Logout
